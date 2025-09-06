@@ -27,7 +27,7 @@ url = https://your-webhook-url
 
 Run the Program
 Navigate to the project directory and execute:
-bashpython checker.py
+python main.py
 
 Follow the console prompts:
 
