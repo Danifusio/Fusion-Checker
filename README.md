@@ -5,15 +5,16 @@ Fusion Checker is  a minecraft account checker with many captures such as Minecr
 
 Instructions for Using the Program
 
-Clone the Repository
+### 1. Clone the Repository
+   
 Download the code from GitHub by running the following command in your terminal:
 bashgit clone https://github.com/your-username/your-repository.git
 Or click "Code" and download the ZIP manually if preferred.
 Install Dependencies
 Ensure you have Python 3.x installed. Then, install the required libraries with:
-bashpip install requests colorama tkinter urllib3 socks ipaddress configparser
+pip install -r requirements.txt
 
-Configure the Program
+### 2.  Configure the Program
 
 Create a results folder in the project directory if it doesn’t exist.
 Optional: Create a config.ini file in the root directory to enable webhook notifications (example):
@@ -21,7 +22,7 @@ text[Webhook]
 enabled = true
 url = https://your-webhook-url
 
-Prepare a combo file (format email:password, one per line) and a proxy file (if using proxies, format ip:port or ip:port:user:password).
+### 3.Prepare a combo file (format email:password, one per line) and a proxy file (if using proxies, format ip:port or ip:port:user:password).
 
 
 Run the Program
@@ -37,7 +38,7 @@ Select the combo and proxy files (if applicable) using the file explorer.
 
 
 
-
+### Capture files
 Review the Results
 Results will be saved in the results/[combo-file-name] folder in files such as:
 
@@ -53,7 +54,7 @@ bad.txt: Invalid accounts.
 capture.txt: Additional details for valid accounts.
 
 
-Important Notes
+### Important Notes
 
 Use proxies if checking many accounts to avoid rate limits (429).
 Do not modify the code unless you understand its functionality, as it may break the program.
