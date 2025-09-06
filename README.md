@@ -2,7 +2,6 @@
 Fusion Checker is  a minecraft account checker with many captures such as Minecraft, Gamepass and 2FA
 
 # Instructions
-Here are concise instructions in English for using the program, optimized for a GitHub README:
 
 Instructions for Using the Program
 
