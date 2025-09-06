@@ -43,14 +43,23 @@ Review the Results
 Results will be saved in the results/[combo-file-name] folder in files such as:
 
 hits.txt: Valid accounts with no specific products.
+
 minecraft.txt: Accounts with Minecraft.
+
 gamepass.txt: Accounts with Xbox Game Pass.
+
 ultimate.txt: Accounts with Xbox Game Pass Ultimate.
+
 bedrock.txt: Accounts with Minecraft Bedrock.
+
 dungeons.txt: Accounts with Minecraft Dungeons.
+
 legends.txt: Accounts with Minecraft Legends.
+
 2fa.txt: Accounts with two-factor authentication.
+
 bad.txt: Invalid accounts.
+
 capture.txt: Additional details for valid accounts.
 
 
