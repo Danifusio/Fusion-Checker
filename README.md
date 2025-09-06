@@ -17,7 +17,7 @@ pip install -r requirements.txt
 ### 2.  Configure the Program
 
 Create a results folder in the project directory if it doesn’t exist.
-Optional: Create a config.ini file in the root directory to enable webhook notifications (example):
+Optional: Edit config.ini file to to enable webhook notifications (example):
 text[Webhook]
 enabled = true
 url = https://your-webhook-url
